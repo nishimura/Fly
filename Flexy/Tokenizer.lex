@@ -756,12 +756,9 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 <IN_ATTR,IN_TAG>[-]*{COM}{TAGC} {
     $this->value = $this->createToken($this->tokenName, array($this->tagName,$this->attributes));
-    
-    echo strtoupper($this->tagName);
 
     $this->yybegin(YYINITIAL);
     return FLY_FLEXY_TOKEN_OK;
-
 }
 
 

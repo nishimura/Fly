@@ -403,7 +403,7 @@ class Fly_Flexy_Translator {
             $r = $x->compile($fname);
 
             //printf(" %0.3fs : $fname<BR>", $time);
-            if (is_a($r,'PEAR_Error')) {
+            if ($r instanceof PEAR_Error) {
                 echo "compile failed on $fname<BR>";
                 echo $r->toString();
                 continue;

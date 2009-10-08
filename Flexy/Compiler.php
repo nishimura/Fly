@@ -10,9 +10,9 @@
  * @license    http://www.php.net/license/2_02.txt.  PHP license
  * @version    svn:$Id:$
  */
-// 
-//  
-//  
+//
+//
+//
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
 // +----------------------------------------------------------------------+
@@ -47,79 +47,66 @@ $GLOBAL['_FLY_FLEXY_COMPILER'] = array();
 
 class Fly_Flexy_Compiler {
 
-        
+
     /**
-    * Options 
+    * Options
     *
     * @var array
     * @access public
     */
     var $options;
-    
+
     /**
     * Factory constructor
-    * 
+    *
     * @param   array    options     only ['compiler']  is used directly
     *
     * @return   object    The Compiler Object
     * @access   public
     */
-    function factory($options) 
+    public static function factory($options)
     {
         if (empty($options['compiler'])) {
             $options['compiler'] = 'Flexy';
         }
-        if ( is_object($options['compiler']) &&  $this->is_a($options['compiler'], 'Fly_Flexy_Compiler')) {
+        if ( is_object($options['compiler']) &&  $options['compiler'] instanceof Fly_Flexy_Compiler) {
             $options['compiler']->options = $options;
             return $options['compiler'];
         }
-       
+
         require_once 'Fly/Flexy/Compiler/'.ucfirst( $options['compiler'] ) .'.php';
         $class = 'Fly_Flexy_Compiler_'.$options['compiler'];
         $ret = new $class;
         $ret->options = $options;
         return $ret;
     }
-    /**
-     * Php4 is_a compat !
-     */
-    function is_a($obj, $class)  // which f***wit depreciated is_a....
-    {
-        if (version_compare(phpversion(),"5","<")) {
-           return is_a($obj, $class);
-           
-        } 
-        $test=false; 
-        @eval("\$test = \$obj instanceof ".$class.";");
-        return $test;
 
-    }
-    
+
     /**
     * The compile method.
     *
     * @param object Fly_Flexy that is requesting the compile
-    * @return   object  Fly_Flexy 
+    * @return   object  Fly_Flexy
     * @return   string   to compile (if not using a file as the source)
     * @access   public
     */
-    function compile(&$flexy,$string = false) 
+    function compile(&$flexy,$string = false)
     {
         echo "No compiler implemented!";
     }
-     
+
     /**
     * Append HTML to compiled ouput
     * These are hooks for passing data to other processes
     *
     * @param   string to append to compiled
-    * 
+    *
     * @return   string to be output
     * @access   public
     */
-    function appendHtml($string) 
+    function appendHtml($string)
     {
-      
+
         return $string;
     }
     /**
@@ -131,14 +118,14 @@ class Fly_Flexy_Compiler {
     * @return   string to be output
     * @access   public
     */
-    
-    function appendPhp($string) 
+
+    function appendPhp($string)
     {
-        
+
         return '<?php '.$string.'?>';
     }
     /**
-    * Compile All templates in the 
+    * Compile All templates in the
     * These are hooks for passing data to other processes
     *
     * @param   string PHP code to append to compiled
@@ -146,18 +133,18 @@ class Fly_Flexy_Compiler {
     * @return   string to be output
     * @access   public
     */
-    
+
     function compileAll(&$flexy, $dir = '',$regex='/.html$/')
     {
         $this->flexy = &$flexy;
         $this->compileDir($dir,$regex);
     }
-    
-    
+
+
     function compileDir($dir = '',$regex='/.html$/')
     {
-        
-        
+
+
         foreach ($this->flexy->options['templateDir'] as $base) {
             if (!file_exists($base . DIRECTORY_SEPARATOR  . $dir)) {
                 continue;
@@ -170,12 +157,12 @@ class Fly_Flexy_Compiler {
                 if ($name{0} == '.') {
                     continue;
                 }
-                 
+
                 if (is_dir($base . DIRECTORY_SEPARATOR  . $dir . DIRECTORY_SEPARATOR  . $name)) {
                     $this->compileDir($dir . DIRECTORY_SEPARATOR  . $name,$regex);
                     continue;
                 }
-                
+
                 if (!preg_match($regex,$name)) {
                     continue;
                 }
@@ -183,9 +170,8 @@ class Fly_Flexy_Compiler {
                 $this->flexy->compile($dir . DIRECTORY_SEPARATOR  . $name);
             }
         }
-        
+
     }
-    
+
 
 }
- 

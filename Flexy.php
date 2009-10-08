@@ -1,7 +1,7 @@
 <?php
 // This Package is based upon PEAR::HTML_Template_Flexy (ver 1.3.9 (stable) released on 2009-03-24)
 //  Please visit http://pear.php.net/package/HTML_Template_Flexy
-//  
+//
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
 // +----------------------------------------------------------------------+
@@ -21,12 +21,12 @@
 // +----------------------------------------------------------------------+
 //
 /**
- * A Flexible Template engine - based on simpletemplate  
+ * A Flexible Template engine - based on simpletemplate
  *
  * @abstract Long Description
  *  Have a look at the package description for details.
  *
- * usage: 
+ * usage:
  * $template = new Fly_Flexy($options);
  * $template->compiler('/name/of/template.html');
  * $data =new StdClass
@@ -34,14 +34,14 @@
  * $template->outputObject($data,$elements)
  *
  * Notes:
- * $options can be blank if so, it is read from 
+ * $options can be blank if so, it is read from
  * PEAR::getStaticProperty('Fly_Flexy','options');
  *
- * the first argument to outputObject is an object (which could even be an 
+ * the first argument to outputObject is an object (which could even be an
  * associateve array cast to an object) - I normally send it the controller class.
  * the seconde argument '$elements' is an array of Fly_Flexy_Elements
  * eg. array('name'=> new Fly_Flexy_Element('',array('value'=>'fred blogs'));
- * 
+ *
  *
  *
  *
@@ -49,25 +49,13 @@
 /**
  *   @package    Fly_Flexy
  */
-// prevent disaster when used with xdebug! 
+// prevent disaster when used with xdebug!
 @ini_set('xdebug.max_nesting_level', 1000);
 /*
 * Global variable - used to store active options when compiling a template.
 */
 $GLOBALS['_FLY_FLEXY'] = array();
-// ERRORS:
-/**
- * Workaround for stupid depreciation of is_a...
- */
-function Fly_Flexy_is_a ($obj, $class) // which f***wit depreciated is_a....
-{
-    if (version_compare(phpversion(), "5", "<")) {
-        return is_a($obj, $class);
-    }
-    $test = false;
-    @eval("\$test = \$obj instanceof " . $class . ";");
-    return $test;
-}
+
 define('FLY_FLEXY_ERROR_SYNTAX', - 1); // syntax error in template.
 define('FLY_FLEXY_ERROR_INVALIDARGS', - 2); // bad arguments to methods.
 define('FLY_FLEXY_ERROR_FILE', - 2); // file access problem
@@ -76,7 +64,7 @@ define('FLY_FLEXY_ERROR_DIE', 8); // FATAL DEATH
 
 class Fly_Flexy
 {
-    /* 
+    /*
     *   @var    array   $options    the options for initializing the template class
     */
     public $options = array(
@@ -94,12 +82,12 @@ class Fly_Flexy
         'nonHTML' => false , // dont parse HTML tags (eg. email templates)
         'allowPHP' => false , // allow PHP in template (use true=allow, 'delete' = remove it.)
         'flexyIgnore' => 0 , // turn on/off the tag to element code
-        'numberFormat' => ",2,'.',','" , // default number format  {xxx:n} format = eg. 1,200.00 
+        'numberFormat' => ",2,'.',','" , // default number format  {xxx:n} format = eg. 1,200.00
         'url_rewrite' => '' , // url rewriting ability:
         // eg. "images/:test1/images/,js/:test1/js"
         // changes href="images/xxx" to href="test1/images/xxx"
         // and src="js/xxx.js" to src="test1/js/xxx.js"
-        'compileToString' => false , // should the compiler return a string 
+        'compileToString' => false , // should the compiler return a string
         // rather than writing to a file.
         'privates' => false , // allow access to _variables (eg. suido privates
         'globals' => false , // allow access to _GET/_POST/_REQUEST/GLOBALS/_COOKIES/_SESSION
@@ -121,14 +109,14 @@ class Fly_Flexy
         //         'driver' => 'dataobjectsimple',
         //         'options' => array()
         //  );
-        // or the slower way.. 
+        // or the slower way..
         //   = as it requires loading the code..
         //
         //  'Translation2' => new Translation2('dataobjectsimple','')
         'charset' => 'ISO-8859-1' , // charset used with htmlspecialchars to render data.
         // experimental
         // output options           ------------------------------------------
-        'strict' => false , // All elements in the template must be defined - 
+        'strict' => false , // All elements in the template must be defined -
         // makes php E_NOTICE warnings appear when outputing template.
         'fatalError' => FLY_FLEXY_ERROR_DIE , // default behavior is to die on errors in template.
         'plugins' => array(),
@@ -137,9 +125,9 @@ class Fly_Flexy
         // = array('MyClass_Plugins' => 'MyClass/Plugins.php')
         //    Class, and where to include it from..
     );
-    
 
-    
+
+
     /**
      * The compiled template filename (Full path)
      *
@@ -147,7 +135,7 @@ class Fly_Flexy
      * @access public
      */
     public $compiledTemplate;
-    
+
     /**
      * The source template filename (Full path)
      *
@@ -155,7 +143,7 @@ class Fly_Flexy
      * @access public
      */
     public $currentTemplate;
-    
+
 	/**
      * The getTextStrings Filename
      *
@@ -163,7 +151,7 @@ class Fly_Flexy
      * @access public
      */
     public $getTextStringsFile;
-    
+
     /**
      * The serialized elements array file.
      *
@@ -171,20 +159,20 @@ class Fly_Flexy
      * @access public
      */
     public $elementsFile;
-    
+
     /**
      * Array of HTML_elements which is displayed on the template
-     * 
+     *
      * Technically it's private (eg. only the template uses it..)
-     * 
+     *
      *
      * @var array of  Fly_Flexy_Elements
      * @access private
      */
     public $elements = array();
-    
+
     /**
-     *   Constructor 
+     *   Constructor
      *
      *   Initializes the Template engine, for each instance, accepts options or
      *   reads from PEAR::getStaticProperty('Fly_Flexy','options');
@@ -217,7 +205,7 @@ class Fly_Flexy
         if (! is_string($file) || ! (strlen($file) > 0)) {
             return $this->raiseError('Fly_Flexy::compile no file selected', FLY_FLEXY_ERROR_INVALIDARGS, FLY_FLEXY_ERROR_DIE);
         }
-        
+
         if (! isset($this->options['compileDir'])) {
             return $this->raiseError("Please set option 'compileDir'", FLY_FLEXY_ERROR_FILE, FLY_FLEXY_ERROR_DIE);
         }
@@ -230,9 +218,9 @@ class Fly_Flexy
             list ($file, $this->options['output.block']) = explode('#', $file);
         }
 
-        // PART A mulitlanguage support: ( part B is gettext support in the engine..) 
+        // PART A mulitlanguage support: ( part B is gettext support in the engine..)
         //    - user created language version of template.
-        //    - compile('abcdef.html') will check for compile('abcdef.en.html') 
+        //    - compile('abcdef.html') will check for compile('abcdef.en.html')
         //       (eg. when locale=en)
         $this->currentTemplate = false;
         clearstatcache();
@@ -271,15 +259,15 @@ class Fly_Flexy
             // check if the compile dir has been created
             return $this->raiseError("Could not find Template {$file} in any of the directories<br>" . implode("<BR>", $this->options['templateDir']), FLY_FLEXY_ERROR_INVALIDARGS, FLY_FLEXY_ERROR_DIE);
         }
-        // Savant compatible compiler 
+        // Savant compatible compiler
         if (is_string($this->options['compiler']) && ($this->options['compiler'] == 'Raw')) {
             $this->compiledTemplate = $this->currentTemplate;
             $this->debug("Using Raw Compiler");
             return true;
         }
-        
+
         $compileDest = $this->options['compileDir'];
-        
+
         // we generally just keep the directory structure as the application uses it,
         // so we dont get into conflict with names
         // if we have multi sources we do md5 the basedir..
@@ -299,7 +287,7 @@ class Fly_Flexy
             // use compiled template
             return true;
         }
-        
+
         if (! is_dir($compileDest) || ! is_writeable($compileDest)) {
             require_once 'Fly_System.php';
             System::mkdir(array('-p' , $compileDest));
@@ -311,11 +299,11 @@ class Fly_Flexy
             require_once 'Fly_System.php';
             System::mkdir(array('-p' , '-m' , 0770 , dirname($this->compiledTemplate)));
         }
-        // Compile the template in $file. 
+        // Compile the template in $file.
         require_once 'Fly/Flexy/Compiler.php';
         $compiler = Fly_Flexy_Compiler::factory($this->options);
         $ret = $compiler->compile($this);
-        if (Fly_Flexy_is_a($ret, 'PEAR_Error')) {
+        if ($ret instanceof PEAR_Error) {
             return $this->raiseError('Fly_Flexy fatal error:' . $ret->message, $ret->code, FLY_FLEXY_ERROR_DIE);
         }
         return $ret;
@@ -335,14 +323,14 @@ class Fly_Flexy
         $c->compileAll($this, $dir, $regex);
     }
     /**
-     *   Outputs an object as $t 
+     *   Outputs an object as $t
      *
      *   for example the using simpletags the object's variable $t->test
      *   would map to {test}
      *
      *   @version    01/12/14
      *   @access     public
-     *   @param    object   to output  
+     *   @param    object   to output
      *   @param    array  Fly_Flexy_Elements (or any object that implements toHtml())
      *   @return     none
      */
@@ -367,7 +355,7 @@ class Fly_Flexy
                 $this->elements[$k] = $v;
                 continue;
             }
-            // Call the clever element merger - that understands form values and 
+            // Call the clever element merger - that understands form values and
             // how to display them...
             $this->elements[$k] = $this->mergeElement($this->elements[$k], $v);
         }
@@ -396,7 +384,7 @@ class Fly_Flexy
         $GLOBALS['_FLY_FLEXY']['options'] = $this->options;
         //TODO:ここでサンドボックスに入れる処理を書くか
         include ($this->compiledTemplate);
-        // Return the error handler to its previous state. 
+        // Return the error handler to its previous state.
         error_reporting($_error_reporting);
     }
     /**
@@ -434,7 +422,7 @@ class Fly_Flexy
         $template->compile($file);
         $template->outputObject($t);
     }
-    
+
     /**
      *   if debugging is on, print the debug info to the screen
      *
@@ -444,17 +432,17 @@ class Fly_Flexy
      */
     function debug ($string)
     {
-        if (Fly_Flexy_is_a($this, 'Fly_Flexy')) {
+        if ($this instanceof Fly_Flexy) {
             if (! $this->options['debug']) {
                 return;
             }
-        } else 
+        } else
             if (empty($GLOBALS['_FLY_FLEXY']['debug'])) {
                 return;
             }
         echo "<PRE><B>FLEXY DEBUG:</B> $string</PRE>";
     }
-    
+
     /**
      * A general Utility method that merges Fly_Flexy_Elements
      * Static method - no native debug avaiable..
@@ -467,8 +455,8 @@ class Fly_Flexy
      */
     function mergeElement ($original, $new)
     {
-        // If the properties of $original differ from those of $new and 
-        // they are set on $new, set them to $new's. Otherwise leave them 
+        // If the properties of $original differ from those of $new and
+        // they are set on $new, set them to $new's. Otherwise leave them
         // as they are.
         if ($new->tag && ($new->tag != $original->tag)) {
             $original->tag = $new->tag;
@@ -496,9 +484,9 @@ class Fly_Flexy
     /**
      * Get an array of elements from the template
      *
-     * All <form> elements (eg. <input><textarea) etc.) and anything marked as 
+     * All <form> elements (eg. <input><textarea) etc.) and anything marked as
      * dynamic  (eg. flexy:dynamic="yes") are converted in to elements
-     * (simliar to XML_Tree_Node) 
+     * (simliar to XML_Tree_Node)
      * you can use this to build the default $elements array that is used by
      * outputObject() - or just create them and they will be overlayed when you
      * run outputObject()
@@ -518,7 +506,7 @@ class Fly_Flexy
     /**
      * Lazy loading of PEAR, and the error handler..
      * This should load Fly_Flexy_Error really..
-     * 
+     *
      * @param   string message
      * @param   int      error type.
      * @param   int      an equivalant to pear error return|die etc.
@@ -530,7 +518,7 @@ class Fly_Flexy
     {
         Fly_Flexy::debug("<B>Fly_Flexy::raiseError</B>$message");
         require_once 'PEAR.php';
-        if (Fly_Flexy_is_a($this, 'Fly_Flexy') && ($fatal == FLY_FLEXY_ERROR_DIE)) {
+        if (($this instanceof Fly_Flexy) && ($fatal == FLY_FLEXY_ERROR_DIE)) {
             // rewrite DIE!
             return PEAR::raiseError($message, $type, $this->options['fatalError']);
         }
@@ -540,13 +528,13 @@ class Fly_Flexy
         return PEAR::raiseError($message, $type, $fatal);
     }
     /**
-     * 
-     * Assign API - 
-     * 
+     *
+     * Assign API -
+     *
      * read the docs on Fly_Flexy_Assign::assign()
      *
      * @param   varargs ....
-     * 
+     *
      *
      * @return   mixed    PEAR_Error or true?
      * @access   public
@@ -563,14 +551,14 @@ class Fly_Flexy
         return $this->assign->assign(func_get_args());
     }
     /**
-     * 
+     *
      * Assign API - by Reference
-     * 
+     *
      * read the docs on Fly_Flexy_Assign::assign()
      *
      * @param  key  string
      * @param  value mixed
-     * 
+     *
      * @return   mixed    PEAR_Error or true?
      * @access   public
      * @see  Fly_Flexy_Assign::assign()
@@ -586,13 +574,13 @@ class Fly_Flexy
         $this->assign->assignRef($k, $v);
     }
     /**
-     * 
+     *
      * Plugin (used by templates as $this->plugin(...) or {this.plugin(#...#,#....#)}
-     * 
+     *
      * read the docs on Fly_Flexy_Plugin()
      *
      * @param  varargs ....
-     * 
+     *
      * @return   mixed    PEAR_Error or true?
      * @access   public
      * @see  Fly_Flexy_Plugin
@@ -609,11 +597,11 @@ class Fly_Flexy
         return $this->plugin->call(func_get_args());
     }
     /**
-     * 
+     *
      * output / display ? - outputs an object, without copy by references..
-     * 
+     *
      * @param  optional mixed object to output
-     * 
+     *
      * @return   mixed    PEAR_Error or true?
      * @access   public
      * @see  Fly_Flexy::ouptutObject
@@ -624,11 +612,11 @@ class Fly_Flexy
         return $this->outputObject($object);
     }
     /**
-     * 
+     *
      * render the template with data..
-     * 
+     *
      * @param  optional mixed object to output
-     * 
+     *
      * @return   mixed    PEAR_Error or true?
      * @access   public
      * @see  Fly_Flexy::ouptutObject

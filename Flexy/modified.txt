@@ -14,3 +14,5 @@ FLy/Flexy/Tokenizer.lex
 
 Fly/Flexy/Compiler/Flexy.php
 stringToMethod stringToMethodChainを中心にメソッドチェーン対応を追加
+
+全般、PHP5のE_STRICTに対応

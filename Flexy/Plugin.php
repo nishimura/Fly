@@ -1,7 +1,7 @@
 <?php
 // This Package is based upon PEAR::HTML_Template_Flexy (ver 1.3.9 (stable) released on 2009-03-24)
 //  Please visit http://pear.php.net/package/HTML_Template_Flexy
-//  
+//
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
 // +----------------------------------------------------------------------+
@@ -24,11 +24,11 @@
 //  or {this.plugin(#xxxxx#,#xxxx#):h}
 //
 // BASICALLY THIS IS SAVANT'S PLUGIN PROVIDER.
- 
- 
-class Fly_Flexy_Plugin 
+
+
+class Fly_Flexy_Plugin
 {
-    
+
     /**
     * reference to main engine..
     *
@@ -37,59 +37,59 @@ class Fly_Flexy_Plugin
     */
     var $flexy; // reference to flexy.
     var $pluginCache = array(); // store of instanced plugins..
-    
+
     /**
     * Call a Plugin method.
     *
     * Look up in all the plugins to see if the method exists, if it does, call it.
-    * 
-    * 
+    *
+    *
     * @param   array        name of method, arguments.
-    * 
+    *
     *
     * @return   string      hopefully
     * @access   public
     */
-  
+
     function call($args)
     {
-        
-        
+
+
         $method = $args[0];
         // attempt to load the plugin on-the-fly
         $class = $this->_loadPlugins($method);
-         
-        if (is_a($class,'PEAR_Error')) {
+
+        if ($class instanceof PEAR_Error) {
             //echo $class->toString();
             return $class->toString();
         }
-        
-         
+
+
         // first argument is always the plugin name; shift the first
         // argument off the front of the array and reduce the number of
         // array elements.
         array_shift($args);
-        
+
         return call_user_func_array(array(&$this->plugins[$class],$method), $args);
     }
-    
+
     /**
-    * Load the plugins, and lookup which one provides the required method 
+    * Load the plugins, and lookup which one provides the required method
     *
-    * 
+    *
     * @param   string           Name
     *
     * @return   string|PEAR_Error   the class that provides it.
     * @access   private
     */
-    
-    function _loadPlugins($name) 
+
+    function _loadPlugins($name)
     {
         // name can be:
         // ahref = maps to {class_prefix}_ahref::ahref
         $this->plugins = array();
         if (empty($this->plugins)) {
-          
+
             foreach ($this->flexy->options['plugins'] as $cname=>$file) {
                 if (!is_int($cname)) {
                     include_once $file;
@@ -104,8 +104,8 @@ class Fly_Flexy_Plugin
                 $this->plugins[$class]->flexy = &$this->flexy;
             }
         }
-                
-        
+
+
         foreach ($this->plugins as $class=>$o) {
             //echo "checking :". get_class($o). ":: $name\n";
             if (is_callable(array($o,$name),true)) {
@@ -114,6 +114,6 @@ class Fly_Flexy_Plugin
         }
         return Fly_Flexy::raiseError("could not find plugin with method: '$name'");
     }
-    
-    
+
+
 }

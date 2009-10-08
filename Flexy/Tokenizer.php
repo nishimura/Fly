@@ -1,7 +1,7 @@
 <?php
-// This Package is based upon PEAR::Fly_Flexy (ver 1.3.9 (stable) released on 2009-03-24)
-//  Please visit http://pear.php.net/package/Fly_Flexy
-//
+// This Package is based upon PEAR::HTML_Template_Flexy (ver 1.3.9 (stable) released on 2009-03-24)
+//  Please visit http://pear.php.net/package/Html_Template_Flexy
+//  
 // +----------------------------------------------------------------------+
 // | PHP Version 5                                                        |
 // +----------------------------------------------------------------------+
@@ -26,7 +26,7 @@
 //
 // #mono phpLex/phpLex.exe Tokenizer.lex
 // The lexer is available at http://sourceforge.net/projects/php-sharp/
-//
+// 
 // or the equivialant .NET runtime on windows...
 //
 //  Note need to change a few of these defines, and work out
@@ -122,13 +122,13 @@ class Fly_Flexy_Tokenizer
     * Flexible constructor
     *
     * @param   string       string to tokenize
-    * @param   array        options array (see options above)
-    *
+    * @param   array        options array (see options above)       
+    * 
     *
     * @return   Fly_Flexy_Tokenizer
     * @access   public
     */
-    function &construct($data,$options= array())
+    function &construct($data,$options= array()) 
     {
         $t = new Fly_Flexy_Tokenizer($data);
         foreach($options as $k=>$v) {
@@ -143,7 +143,7 @@ class Fly_Flexy_Tokenizer
     /**
     * raise an error: = return an error token and set the error variable.
     *
-    *
+    * 
     * @param   string           Error type
     * @param   string           Full Error message
     * @param   boolean          is it fatal..
@@ -151,7 +151,7 @@ class Fly_Flexy_Tokenizer
     * @return   int the error token.
     * @access   public
     */
-    function raiseError($s,$n='',$isFatal=false)
+    function raiseError($s,$n='',$isFatal=false) 
     {
         $this->error = "ERROR $n in File {$this->fileName} on Line {$this->yyline} Position:{$this->yy_buffer_end}: $s\n";
         return FLY_FLEXY_TOKEN_ERROR;
@@ -164,7 +164,7 @@ class Fly_Flexy_Tokenizer
     * @return   int   token ok.
     * @access   public
     */
-    function returnSimple()
+    function returnSimple() 
     {
         $this->value = $this->createToken('TextSimple');
         return FLY_FLEXY_TOKEN_OK;
@@ -176,7 +176,7 @@ class Fly_Flexy_Tokenizer
     * @return   Object   some kind of token..
     * @access   public
     */
-    function createToken($token, $value = false, $line = false, $charPos = false)
+    function createToken($token, $value = false, $line = false, $charPos = false) 
     {
         if ($value === false) {
             $value = $this->yytext();
@@ -204,7 +204,7 @@ class Fly_Flexy_Tokenizer
     var $yy_at_bol;
     var $yy_lexical_state;
 
-    function Fly_Flexy_Tokenizer($data)
+    function Fly_Flexy_Tokenizer($data) 
     {
         $this->yy_buffer = $data;
         $this->yy_buffer_read = strlen($data);
@@ -217,7 +217,7 @@ class Fly_Flexy_Tokenizer
         $this->yy_lexical_state = YYINITIAL;
     }
 
-    var $yy_state_dtrans = array  (
+    var $yy_state_dtrans = array  ( 
         0,
         293,
         38,
@@ -259,7 +259,7 @@ class Fly_Flexy_Tokenizer
 
     function yy_move_end ()
     {
-        if ($this->yy_buffer_end > $this->yy_buffer_start &&
+        if ($this->yy_buffer_end > $this->yy_buffer_start && 
             '\n' == $this->yy_buffer{$this->yy_buffer_end-1})
         {
             $this->yy_buffer_end--;
@@ -328,13 +328,13 @@ class Fly_Flexy_Tokenizer
 
     function yy_error ($code,$fatal)
     {
-        if (method_exists($this,'raiseError')) {
+        if (method_exists($this,'raiseError')) { 
 	        $this->_fatal = $fatal;
             $msg = $this->yy_error_string[$code];
             if ($code == 1) {
                 $msg .= $this->yy_buffer[$this->yy_buffer_start] . "\"";
             }
- 		    return $this->raiseError($msg, $code, $fatal);
+ 		    return $this->raiseError($msg, $code, $fatal); 
  		}
         echo $this->yy_error_string[$code];
         if ($fatal) {
@@ -916,7 +916,7 @@ class Fly_Flexy_Tokenizer
         50, 50, 50, 50, 50, 50, 50, 50,
         50, 50, 50, 50, 50, 50, 50, 50,
         50, 50, 50, 50, 50, 50, 50, 50,
-        50, 0, 0
+        50, 0, 0 
          );
 
 
@@ -4468,7 +4468,7 @@ class Fly_Flexy_Tokenizer
          $yy_last_accept_state = YY_NO_STATE;
         $yy_initial = true;
         $yy_this_accept = 0;
-
+        
         $this->yy_mark_start();
         $yy_this_accept = $this->yy_acpt[$yy_state];
         if (YY_NOT_ACCEPT != $yy_this_accept) {
@@ -4520,7 +4520,7 @@ case 2:
 }
 case 3:
 {
-    //abcd -- data characters
+    //abcd -- data characters  
     // { and ) added for flexy
     $this->value = $this->createToken('Text');
     return FLY_FLEXY_TOKEN_OK;
@@ -4545,15 +4545,15 @@ case 5:
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 6:
-{
+{  
     // <> -- empty start tag */
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    return $this->raiseError("empty tag");
+    return $this->raiseError("empty tag"); 
 }
 case 7:
-{
+{ 
     /* <? php start.. */
     //echo "STARTING PHP?\n";
     $this->yyPhpBegin = $this->yy_buffer_start;
@@ -4589,7 +4589,7 @@ case 10:
 }
 case 11:
 {
-    /* </> -- empty end tag */
+    /* </> -- empty end tag */  
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
@@ -4611,7 +4611,7 @@ case 13:
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
     }
-    return $this->raiseError("empty markup tag not handled");
+    return $this->raiseError("empty markup tag not handled"); 
 }
 case 14:
 {
@@ -4619,7 +4619,7 @@ case 14:
     return $this->returnSimple();
 }
 case 15:
-{
+{ 
     /* eg. <?xml-stylesheet, <?php ... */
     $t = $this->yytext();
     $tagname = trim(strtoupper(substr($t,2)));
@@ -4645,7 +4645,7 @@ case 16:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 17:
-{
+{ 
     /* ]]> -- marked section end */
     return $this->returnSimple();
 }
@@ -4818,7 +4818,7 @@ case 38:
 case 39:
 {
     // <foo^<bar> -- unclosed start tag */
-    return $this->raiseError("Unclosed tags not supported");
+    return $this->raiseError("Unclosed tags not supported"); 
 }
 case 40:
 {
@@ -4838,7 +4838,6 @@ case 40:
 case 41:
 {
     $this->value = $this->createToken($this->tokenName, array($this->tagName,$this->attributes));
-    echo strtoupper($this->tagName);
     $this->yybegin(YYINITIAL);
     return FLY_FLEXY_TOKEN_OK;
 }
@@ -4859,7 +4858,7 @@ case 43:
 }
 case 44:
 {
-   // <a ^href = "xxx"> -- attribute name
+   // <a ^href = "xxx"> -- attribute name 
     $this->attrKey = substr(trim($this->yytext()),0,-1);
     $this->yybegin(IN_ATTRVAL);
     $this->value = '';
@@ -4883,7 +4882,7 @@ case 46:
 }
 case 47:
 {
-    // <a href = ^http://foo/> -- unquoted literal HACK */
+    // <a href = ^http://foo/> -- unquoted literal HACK */                          
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);
     //   $this->raiseError("attribute value needs quotes");
@@ -4901,11 +4900,11 @@ case 48:
 case 49:
 {
     // <em^/ -- NET tag */
-    return $this->raiseError("attribute value missing");
+    return $this->raiseError("attribute value missing"); 
 }
 case 50:
-{
-    return $this->raiseError("Tag close found where attribute value expected");
+{ 
+    return $this->raiseError("Tag close found where attribute value expected"); 
 }
 case 51:
 {
@@ -4922,18 +4921,18 @@ case 52:
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 53:
-{
+{ 
     // whitespace switch back to IN_ATTR MODE.
     $this->value = '';
     $this->yybegin(IN_ATTR);
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 54:
-{
-    return $this->raiseError("extraneous character in end tag");
+{ 
+    return $this->raiseError("extraneous character in end tag"); 
 }
 case 55:
-{
+{ 
     $this->value = $this->createToken($this->tokenName, array($this->tagName));
         array($this->tagName);
     $this->yybegin(YYINITIAL);
@@ -4963,34 +4962,34 @@ case 57:
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 58:
-{
+{ 
     $this->value = $this->createToken('WhiteSpace');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 59:
 {
     return $this->raiseError("illegal character in markup declaration (0x".dechex(ord($this->yytext())).')');
 }
 case 60:
-{
+{   
     $this->value = $this->createToken('Number');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 61:
-{
+{ 
     $this->value = $this->createToken('Name');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 62:
-{
+{ 
     $this->value = $this->createToken('NameT');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 63:
-{
+{   
     $this->value = $this->createToken('CloseTag');
-    $this->yybegin(YYINITIAL);
-    return FLY_FLEXY_TOKEN_OK;
+    $this->yybegin(YYINITIAL); 
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 64:
 {
@@ -5000,9 +4999,9 @@ case 64:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 65:
-{
+{ 
     $this->value = $this->createToken('NumberT');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 66:
 {
@@ -5017,14 +5016,14 @@ case 67:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 68:
-{
+{ 
     $this->value = $this->createToken('Literal');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 69:
 {
     // inside a comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 70:
@@ -5033,24 +5032,24 @@ case 70:
 	return FLY_FLEXY_TOKEN_NONE;
 }
 case 71:
-{
+{   
     $this->value = $this->createToken('Comment',
         '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),
         $this->yyline,$this->yyCommentBegin
     );
-    $this->yybegin(YYINITIAL);
-    return FLY_FLEXY_TOKEN_OK;
+    $this->yybegin(YYINITIAL); 
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 72:
-{
+{ 
     $this->value = $this->createToken('Declaration');
     return FLY_FLEXY_TOKEN_OK;
 }
 case 73:
-{
+{ 
     // ] -- declaration subset close */
     $this->value = $this->createToken('DSEndSubset');
-    $this->yybegin(IN_DSCOM);
+    $this->yybegin(IN_DSCOM); 
     return FLY_FLEXY_TOKEN_OK;
 }
 case 74:
@@ -5185,37 +5184,37 @@ case 85:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 86:
-{
+{ 
     $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     return FLY_FLEXY_TOKEN_OK;
 }
 case 87:
-{
+{ 
     /* ]]> -- marked section end */
     $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     $this->yybegin(YYINITIAL);
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 88:
 {
     // inside a comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     $this->value = $this->createToken('DSComment');
     return FLY_FLEXY_TOKEN_OK;
 }
 case 89:
-{
+{   
     $this->value = $this->createToken('DSEnd');
-    $this->yybegin(YYINITIAL);
-    return FLY_FLEXY_TOKEN_OK;
+    $this->yybegin(YYINITIAL); 
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 90:
-{
+{     
     /* anything inside of php tags */
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 91:
-{
+{ 
     /* php end */
     $this->value = $this->createToken('Php',
         substr($this->yy_buffer,$this->yyPhpBegin ,$this->yy_buffer_end - $this->yyPhpBegin ),
@@ -5226,7 +5225,7 @@ case 91:
 case 92:
 {
     // inside a style comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     $this->value = $this->createToken('Comment');
 	return FLY_FLEXY_TOKEN_OK;
 }
@@ -5243,11 +5242,11 @@ case 94:
 	return FLY_FLEXY_TOKEN_OK;
 }
 case 95:
-{
+{   
     // --> inside a style tag.
     $this->value = $this->createToken('Comment');
-    $this->yybegin(YYINITIAL);
-    return FLY_FLEXY_TOKEN_OK;
+    $this->yybegin(YYINITIAL); 
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 96:
 {
@@ -5276,7 +5275,7 @@ case 100:
 }
 case 101:
 {
-    //abcd -- data characters
+    //abcd -- data characters  
     // { and ) added for flexy
     $this->value = $this->createToken('Text');
     return FLY_FLEXY_TOKEN_OK;
@@ -5301,7 +5300,7 @@ case 103:
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 104:
-{
+{ 
     /* <? php start.. */
     //echo "STARTING PHP?\n";
     $this->yyPhpBegin = $this->yy_buffer_start;
@@ -5351,7 +5350,7 @@ case 109:
     return $this->returnSimple();
 }
 case 110:
-{
+{ 
     /* eg. <?xml-stylesheet, <?php ... */
     $t = $this->yytext();
     $tagname = trim(strtoupper(substr($t,2)));
@@ -5384,7 +5383,7 @@ case 112:
 case 113:
 {
     // <foo^<bar> -- unclosed start tag */
-    return $this->raiseError("Unclosed tags not supported");
+    return $this->raiseError("Unclosed tags not supported"); 
 }
 case 114:
 {
@@ -5395,7 +5394,7 @@ case 114:
 }
 case 115:
 {
-    // <a href = ^http://foo/> -- unquoted literal HACK */
+    // <a href = ^http://foo/> -- unquoted literal HACK */                          
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);
     //   $this->raiseError("attribute value needs quotes");
@@ -5417,33 +5416,33 @@ case 117:
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 118:
-{
+{ 
     $this->value = $this->createToken('WhiteSpace');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 119:
 {
     return $this->raiseError("illegal character in markup declaration (0x".dechex(ord($this->yytext())).')');
 }
 case 120:
-{
+{   
     $this->value = $this->createToken('Number');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 121:
-{
+{ 
     $this->value = $this->createToken('Name');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 122:
-{
+{ 
     $this->value = $this->createToken('NameT');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 123:
-{
+{ 
     $this->value = $this->createToken('NumberT');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 124:
 {
@@ -5452,9 +5451,9 @@ case 124:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 125:
-{
+{ 
     $this->value = $this->createToken('Literal');
-    return FLY_FLEXY_TOKEN_OK;
+    return FLY_FLEXY_TOKEN_OK; 
 }
 case 126:
 {
@@ -5487,26 +5486,26 @@ case 129:
     return FLY_FLEXY_TOKEN_OK;
 }
 case 130:
-{
+{ 
     $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     return FLY_FLEXY_TOKEN_OK;
 }
 case 131:
 {
     // inside a comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     $this->value = $this->createToken('DSComment');
     return FLY_FLEXY_TOKEN_OK;
 }
 case 132:
-{
+{     
     /* anything inside of php tags */
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 133:
 {
     // inside a style comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     $this->value = $this->createToken('Comment');
 	return FLY_FLEXY_TOKEN_OK;
 }
@@ -5528,7 +5527,7 @@ case 137:
 }
 case 138:
 {
-    //abcd -- data characters
+    //abcd -- data characters  
     // { and ) added for flexy
     $this->value = $this->createToken('Text');
     return FLY_FLEXY_TOKEN_OK;
@@ -5562,19 +5561,19 @@ case 143:
     return $this->raiseError("illegal character in markup declaration (0x".dechex(ord($this->yytext())).')');
 }
 case 144:
-{
+{ 
     $this->value = $this->createToken('Cdata',$this->yytext(), $this->yyline);
     return FLY_FLEXY_TOKEN_OK;
 }
 case 145:
-{
+{     
     /* anything inside of php tags */
     return FLY_FLEXY_TOKEN_NONE;
 }
 case 146:
 {
     // inside a style comment (not - or not --
-    // <!^--...-->   -- comment */
+    // <!^--...-->   -- comment */   
     $this->value = $this->createToken('Comment');
 	return FLY_FLEXY_TOKEN_OK;
 }
@@ -5661,7 +5660,7 @@ case 175:
 }
 case 430:
 {
-    //abcd -- data characters
+    //abcd -- data characters  
     // { and ) added for flexy
     $this->value = $this->createToken('Text');
     return FLY_FLEXY_TOKEN_OK;

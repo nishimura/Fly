@@ -107,7 +107,7 @@ class Fly_Flexy_Compiler_Flexy_Flexy  {
             $v = substr($v,1,-1);
             $ret .= $this->compiler->appendPhp(
                 '$__tmp = HTML_Javascript_Convert::convertVar('.$element->toVar($v) .',\''.$prefix . $k.'\',true);'.
-                'echo (is_a($__tmp,"PEAR_Error")) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;');
+                'echo ($__tmp instanceof PEAR_Error) ? ("<pre>".print_r($__tmp,true)."</pre>") : $__tmp;');
             $ret .= $this->compiler->appendHTML("\n");
         }
         $ret .= $this->compiler->appendHTML("</script>");
@@ -199,9 +199,9 @@ class Fly_Flexy_Compiler_Flexy_Flexy  {
                         }
                     } else {
                         //it's a variable
-                        if (is_a($item, 'Fly_Flexy_Token_Var')) {
+                        if ($item instanceof Fly_Flexy_Token_Var) {
                             $value = $item->toVar($item->value);
-                            if (is_a($value, 'PEAR_Error')) {
+                            if ($value instanceof PEAR_Error) {
                                 return $value;
                             }
                             $string .= "{{$value}}";
@@ -300,7 +300,7 @@ class Fly_Flexy_Compiler_Flexy_Flexy  {
         // that the {xxx} element is item 1 in the list...
         $e=$element->ucAttributes['CALL'][1];
         $add = $e->toVar($e->value);
-        if (is_a($add,'PEAR_Error')) {
+        if ($add instanceof PEAR_Error) {
             return $add;
         }
         return $this->compiler->appendPHP(

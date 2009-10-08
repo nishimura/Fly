@@ -113,7 +113,8 @@ class Fly_Flexy_Tree {
         $t->tokens[0]->id =0;
 
         // process
-        if (is_a($r = $t->tokenize($data),'PEAR_Error')) {
+        $r = $t->tokenize($data);
+        if ($r instanceof PEAR_Error) {
             return $r;
         }
 

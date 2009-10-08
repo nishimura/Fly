@@ -89,7 +89,7 @@ class Fly_Flexy_Token {
     * @access   public
     */
 
-    function factory($token, $value, $line, $charPos=0) {
+    public static function factory($token, $value, $line, $charPos=0) {
         // try not to reload the same class to often
         static $loaded = array();
 
@@ -184,7 +184,7 @@ class Fly_Flexy_Token {
                 $add = 'child has no compile method';
             }
 
-            if (is_a($add,'PEAR_Error')) {
+            if ($add instanceof PEAR_Error) {
                 return $add;
             }
             $ret .= $add;
@@ -211,7 +211,7 @@ class Fly_Flexy_Token {
     * @static
     */
 
-    function buildTokens($tokenizer)
+    public static function buildTokens($tokenizer)
     {
         global $_FLY_FLEXY_TOKEN;
 
@@ -318,12 +318,12 @@ class Fly_Flexy_Token {
 
 
         for($i=1;$i<$total;$i++) {
-            if (!isset($res[$i]) || !is_a($res[$i],'Fly_Flexy_Token_Text')) {
+            if (!isset($res[$i]) || !($res[$i] instanceof Fly_Flexy_Token_Text)) {
                 continue;
             }
             $first = $i;
             $i++;
-            while ($i<$total && is_a($res[$i],'Fly_Flexy_Token_Text')) {
+            while ($i<$total && $res[$i] instanceof Fly_Flexy_Token_Text) {
                 if (isset($res[$i])) {
                     $res[$first]->value .= $res[$i]->value;
                     $res[$i]->value = '';
@@ -428,7 +428,7 @@ class Fly_Flexy_Token {
     * @access   public
     * @static
     */
-    function buildChildren($id)
+    public static function buildChildren($id)
     {
         global $_FLY_FLEXY_TOKEN;
 
@@ -537,7 +537,7 @@ class Fly_Flexy_Token {
 
 
         $ret =  $this->findVar($parts[0]);
-        if (is_a($ret,'PEAR_Error')) {
+        if ($ret instanceof PEAR_Error) {
             return $ret;
         }
 

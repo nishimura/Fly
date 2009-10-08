@@ -64,7 +64,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
     * @access   public
     */
 
-    function &factory($type,&$compiler) {
+    public static function factory($type,&$compiler) {
         if (!$type) {
             $type = 'Tag';
         }
@@ -77,8 +77,8 @@ class Fly_Flexy_Compiler_Flexy_Tag
         }
 
         $filename = 'Fly/Flexy/Compiler/Flexy/' . ucfirst(strtolower($type)) . '.php';
-        if (!Fly_Flexy_Compiler_Flexy_Tag::fileExistsInPath($filename)) {
-            $ret = Fly_Flexy_Compiler_Flexy_Tag::factory('Tag',$compiler);
+        if (!self::fileExistsInPath($filename)) {
+            $ret = self::factory('Tag', $compiler);
             return $ret;
         }
         // if we dont have a handler - just use the basic handler.
@@ -105,7 +105,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
     * @return    boolean  true if it is in there.
     * @access   public
     */
-    function fileExistsInPath($filename) {
+    public static function fileExistsInPath($filename) {
         if (isset($GLOBALS['_'.__CLASS__]['cache'][$filename])) {
             return $GLOBALS['_'.__CLASS__]['cache'][$filename];
         }
@@ -187,7 +187,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
         $add = $this->toStringOpenTag($element,$ret);
 
-        if (is_a($add,'PEAR_Error')) {
+        if ($add instanceof PEAR_Error) {
             return $add;
         }
 
@@ -200,7 +200,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
         if ($element->postfix) {
             foreach ($element->postfix as $e) {
                 $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
+                if ($add instanceof PEAR_Error) {
                     return $add;
                 }
                 $ret .= $add;
@@ -208,7 +208,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
         } else if ($this->element->postfix) { // if postfixed by self..
             foreach ($this->element->postfix as $e) {
                 $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
+                if ($add instanceof PEAR_Error) {
                     return $add;
                 }
 
@@ -218,11 +218,11 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
 
         $tmp = $this->toStringChildren($element,$ret);
-        if (is_a($tmp,'PEAR_Error')) {
+        if ($tmp instanceof PEAR_Error) {
             return  $tmp;
         }
         $tmp = $this->toStringCloseTag($element,$ret);
-        if (is_a($tmp,'PEAR_Error')) {
+        if ($tmp instanceof PEAR_Error) {
             return  $tmp;
         }
 
@@ -286,7 +286,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
                          null,   FLY_FLEXY_ERROR_DIE);
                 }
                 $add = $v[1]->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
+                if ($add instanceof PEAR_Error) {
                     return $add;
                 }
                 $ret .= ' ' . $add;
@@ -317,7 +317,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
             if (is_object($v)) {
                 $add = $v->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
+                if ($add instanceof PEAR_Error) {
                     return $add;
                 }
 
@@ -338,7 +338,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
                     continue;
                 }
                 $add = $item->compile($this->compiler);
-                if (is_a($add,'PEAR_Error')) {
+                if ($add instanceof PEAR_Error) {
                     return $add;
                 }
                 $ret .= $add;
@@ -375,7 +375,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
             return;
         }
         $add = $element->compileChildren($this->compiler);
-        if (is_a($add,'PEAR_Error')) {
+        if ($add instanceof PEAR_Error) {
             return $add;
         }
         $ret .= $add;
@@ -399,7 +399,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
         if ((! empty($element->tag)) && (! empty($element->oTag)))
         {
             $add = $element->close->compile($this->compiler);
-            if (is_a($add,'PEAR_Error')) {
+            if ($add instanceof PEAR_Error) {
                 return $add;
             }
             $ret .= $add;
@@ -412,7 +412,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
         if ($element->close->postfix)  {
             foreach ($element->close->postfix as $e)  {
                 $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error'))  {
+                if ($add instanceof PEAR_Error)  {
                     return $add;
                 }
                 $ret .= $add;
@@ -422,7 +422,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
         if ($this->element->close->postfix)  { // if postfixed by self..
             foreach ($this->element->close->postfix as $e)  {
                 $add = $e->compile($this->compiler);
-                if (is_a($add,'PEAR_Error'))  {
+                if ($add instanceof PEAR_Error)  {
                     return $add;
                 }
 
@@ -750,7 +750,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
             for($i =1; $i < count($ar) -1; $i++) {
                 switch(true) {
-                    case is_a($ar[$i], 'Fly_Flexy_Token_Var'):
+                    case $ar[$i] instanceof Fly_Flexy_Token_Var:
                         $str .= '. ' . $ar[$i]->toVar($ar[$i]->value). ' ';
                         break;
                     case is_string($ar[$i]):
@@ -801,7 +801,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
                         $ret .= "    {$output_avar} .= {$wrapper}{$item}{$wrapper};\n";
                         continue;
                     }
-                    if (!is_object($item) || !is_a($item, 'Fly_Flexy_Token_Var')) {
+                    if (!is_object($item) || !($item instanceof Fly_Flexy_Token_Var)) {
                         return $this->_raiseErrorWithPositionAndTag(
                             "unsupported type found in attribute, use flexy:ignore to prevent parsing or remove it. " .
                                 print_r($this->element,true),
@@ -809,7 +809,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
                     }
 
                     $var = $item->toVar($item->value);
-                    if (is_a($var, 'PEAR_Error')) {
+                    if ($var instanceof PEAR_Error) {
                         return $var;
                     }
                     list($prefix,$suffix) = $this->compiler->getModifierWrapper($item);
@@ -1224,19 +1224,19 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
     function elementUsesDynamic($e)
     {
-        if (is_a($e,'Fly_Flexy_Token_Var')) {
+        if ($e instanceof Fly_Flexy_Token_Var) {
             return true;
         }
-        if (is_a($e,'Fly_Flexy_Token_Foreach')) {
+        if ($e instanceof Fly_Flexy_Token_Foreach) {
             return true;
         }
-        if (is_a($e,'Fly_Flexy_Token_If')) {
+        if ($e instanceof Fly_Flexy_Token_If) {
             return true;
         }
-        if (is_a($e,'Fly_Flexy_Token_Method')) {
+        if ($e instanceof Fly_Flexy_Token_Method) {
             return true;
         }
-        if (!is_a($e,'Fly_Flexy_Token_Tag')) {
+        if (!($e instanceof Fly_Flexy_Token_Tag)) {
             return false;
         }
         if  ($e->getAttribute('FLEXY:IF')  !== false) {
