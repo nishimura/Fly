@@ -1,10 +1,16 @@
-ï»¿å¤‰æ›´ç‚¹
+•ÏX“_
 Fly/Flexy.php
-ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒˆãƒ©ãƒãƒ¼ã‚µãƒ«å¯¾ç­–ã‚’å°‘ã—ã„ã‚ŒãŸ
-ãƒžãƒ«ãƒã‚½ãƒ¼ã‚¹ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤ã—ã€ è¨­å®šã•ã‚ŒãŸãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ‘ã‚¹ã®ä¸­ã‹ã‚‰ã€æœ€åˆã«è¦‹ã¤ã‹ã£ãŸã‚‚ã®ã‚’ä½¿ç”¨ã™ã‚‹ã‚ˆã†ã«ã—ãŸ
-ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ç”¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã«ã€session save pathã‚’ä½¿ç”¨è¨­å®šã«ãªã£ã¦ã„ã‚‹ãŒã€
-ã‚´ãƒŸã‚’å‰Šé™¤ã§ããªããªã‚‹ãƒªã‚¹ã‚¯ã‚‚ã‚ã‚‹ã®ã§ã€ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã“ã¨ã«ã™ã‚‹ã€‚
-outputObjectã§ã®error_reportingã®ãƒªã‚¹ãƒˆã‚¢ã«é–¢ã™ã‚‹ãƒã‚°ã‚’ä¿®æ­£
+ƒfƒBƒŒƒNƒgƒŠƒgƒ‰ƒo[ƒTƒ‹‘Îô‚ð­‚µ‚¢‚ê‚½
+ƒ}ƒ‹ƒ`ƒ\[ƒXƒIƒvƒVƒ‡ƒ“‚ðíœ‚µAÝ’è‚³‚ê‚½ƒeƒ“ƒvƒŒ[ƒgƒpƒX‚Ì’†‚©‚çAÅ‰‚ÉŒ©‚Â‚©‚Á‚½‚à‚Ì‚ðŽg—p‚·‚é‚æ‚¤‚É‚µ‚½
+ƒRƒ“ƒpƒCƒ‹—pƒfƒBƒŒƒNƒgƒŠ‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÉAsession save path‚ðŽg—p‚·‚éÝ’è‚É‚È‚Á‚Ä‚¢‚é‚ªA
+ƒSƒ~‚ðíœ‚Å‚«‚È‚­‚È‚éƒŠƒXƒN‚à‚ ‚é‚Ì‚ÅAƒGƒ‰[‚ð•Ô‚·‚±‚Æ‚É‚·‚éB
+outputObject‚Å‚Ìerror_reporting‚ÌƒŠƒXƒgƒA‚ÉŠÖ‚·‚éƒoƒO‚ðC³
 
 Fly/Flexy/Token.php
-factoryå†…ã§ã®ã€ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒˆãƒ©ãƒãƒ¼ã‚µãƒ«å¯¾ç­–ã¨ã€ç„¡é§„ã«newã—ã¦ã„ã‚‹éƒ¨åˆ†ã‚’ç¯€ç´„ã—ãŸ
+factory“à‚Å‚ÌAƒfƒBƒŒƒNƒgƒŠƒgƒ‰ƒo[ƒTƒ‹‘Îô‚ÆA–³‘Ê‚Énew‚µ‚Ä‚¢‚é•”•ª‚ðß–ñ‚µ‚½
+
+FLy/Flexy/Tokenizer.lex
+ƒƒ\ƒbƒhƒ`ƒF[ƒ“‚É‘Î‰ž‚Å‚«‚é‚æ‚¤‚ÉƒƒWƒbƒN‚ðC³
+
+Fly/Flexy/Compiler/Flexy.php
+stringToMethod stringToMethodChain‚ð’†S‚Éƒƒ\ƒbƒhƒ`ƒF[ƒ“‘Î‰ž‚ð’Ç‰Á
