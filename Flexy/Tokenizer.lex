@@ -1059,6 +1059,15 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return FLY_FLEXY_TOKEN_OK;
 }
 
+// Added by Satoshi Nishimura
+<YYINITIAL,IN_CDATA>"{loop:"{FLEXY_VAR}"}" {
+    $this->value = $this->createToken('Loop', explode(',',substr($this->yytext(),6,-1)));
+    return FLY_FLEXY_TOKEN_OK;
+}
+<YYINITIAL,IN_CDATA>"{endloop:}" {
+    $this->value = $this->createToken('EndLoop', '');
+    return FLY_FLEXY_TOKEN_OK;
+}
 
 // variables
 // need to work out how to do this with attribute values..

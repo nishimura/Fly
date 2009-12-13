@@ -370,6 +370,64 @@ class Fly_Flexy_Compiler_Flexy extends Fly_Flexy_Compiler {
         return $ret;
     }
 
+    /**
+     * Fly_Flexy_Token_Loop toString 
+     *
+     * @author   Satoshi Nishimura
+     * @param    object  FLY_Flexy_Token_Loop 
+     * @return   string  string to build a template
+     */
+    public function toStringLoop($element){
+        global $_FLY_FLEXY_TOKEN;
+        $s = $_FLY_FLEXY_TOKEN['state'];
+        
+        $loopon = $element->toVar($element->loopOn);
+        if (is_a($loopon,'PEAR_Error')) {
+            return $loopon;
+        }
+        
+        $ret = 'if ($this->options[\'strict\'] || ('.
+            'is_array('. $loopon. ')  || ' .
+            'is_object(' . $loopon  . '))) ' .
+            '{$loop_tmp'.$s.' = $t;' .
+            'foreach(' . $loopon  . " ";
+            
+        $ret .= 'as $loop'.$s;
+        
+        $ret .= ') {';
+
+        $ret .= '$t = clone $loop_tmp' . $s . ';'
+            . 'foreach ($loop'.$s.' as $key'.$s.' => $value'.$s.'){'
+            . '$t->$key'.$s.' = $value'.$s.'; }';
+        
+        $element->pushState();
+        $element->pushVar($element->value);
+
+        return $this->appendPhp($ret);
+    }
+
+    /**
+     * Fly_Flexy_Token_EndLoop toString 
+     *
+     * @author   Satoshi Nishimura
+     * @param    object  FLY_Flexy_Token_EndLoop
+     * @return   string  string to build a template
+     */
+    public function toStringEndLoop($element) 
+    {
+        global $_FLY_FLEXY_TOKEN;
+        $s = $_FLY_FLEXY_TOKEN['state'] - 1;
+
+        if ($element->pullState() === false) {
+            return $this->appendHTML(
+                "<font color=\"red\">Unmatched {endloop:} on line: {$element->line}</font>"
+                );
+        }
+
+        $str = '} $t = $loop_tmp'.$s.';';
+        return $this->appendPhp($str . '}');
+    }
+    
 
     /**
     *   Fly_Flexy_Token_Else toString

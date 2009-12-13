@@ -137,9 +137,18 @@ class Fly_Flexy_Compiler_Flexy_Tag
     var $hasForeach = false;
 
     /**
+     * flexy:loop
+     *
+     * @var bool
+     * @author Satoshi Nishimura
+     */
+    public $hasLoop;
+
+    /**
     * toString - display tag, attributes, postfix and any code in attributes.
     * Note first thing it does is call any parseTag Method that exists..
     *
+    * Adding execute function of parseAttributeLoop by Satoshi Nishimura.
     *
     * @see parent::toString()
     */
@@ -178,6 +187,7 @@ class Fly_Flexy_Compiler_Flexy_Tag
 
         $ret  = $this->parseAttributeForeach();
         $ret .= $this->parseAttributeIf();
+        $ret .= $this->parseAttributeLoop();
 
         // support Custom Attributes...
         require_once 'Fly/Flexy/Compiler/Flexy/CustomFlexyAttributes.php';
@@ -512,6 +522,55 @@ class Fly_Flexy_Compiler_Flexy_Tag
         $this->element->clearAttribute('FLEXY:FOREACH');
         return $foreachObj->compile($this->compiler);
     }
+
+    /**
+    * flexy:loop attribute
+    *
+    * @author  Satoshi Nishimura
+    * @return   string to add to output.
+    */    
+    public function parseAttributeLoop() 
+    {
+        $loop = $this->element->getAttribute('FLEXY:LOOP');
+        if ($loop === false) {
+            return '';
+        }
+        
+        $this->element->hasLoop = true;
+        
+        $loopObj =  $this->element->factory('Loop', explode(',',$loop), $this->element->line);
+        
+        if ($loopObj === false) {
+            return $this->_raiseErrorWithPositionAndTag(
+                "Missing Arguments: An flexy:loop attribute was foundon Line {$this->element->line} 
+                in tag &lt;{$this->element->tag} flexy:loop=&quot;$loop&quot; .....&gt;<BR>
+                the syntax is  &lt;sometag flexy:loop=&quot;onarray,withvariable[,withanothervar] &gt;<BR>",
+                 null,  Fly_FLEXY_ERROR_DIE);
+        }
+        
+        
+        
+        if (!$this->element->close) {
+        
+            if ($this->element->getAttribute('/') === false) {
+            
+            
+                return $this->_raiseErrorWithPositionAndTag(
+                    "A flexy:loop attribute was found in &lt;{$this->element->name} tag without a corresponding &lt;/{$this->element->tag}
+                        tag on Line {$this->element->line} &lt;{$this->element->tag}&gt;",
+                    null, Fly_FLEXY_ERROR_DIE);
+            }
+
+            $this->element->postfix = array($this->element->factory("EndLoop", '', $this->element->line));
+        } else {
+            $this->element->close->postfix = array($this->element->factory("EndLoop", '', $this->element->line));
+        }
+
+        $this->element->clearAttribute('FLEXY:LOOP');
+        return $loopObj->compile($this->compiler);
+    }
+
+
     /**
     * Reads an flexy:if attribute -
     *
