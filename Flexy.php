@@ -246,7 +246,7 @@ class Fly_Flexy
                     $this->currentTemplate = realpath($tmpl);
                     break;
                 default:
-                    continue;
+                    continue 2;
             }
             // check Directory traversal
             if (strncmp($this->currentTemplate, $tmplDir, strlen($tmplDir)) !== 0) {
